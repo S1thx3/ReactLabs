@@ -6,18 +6,21 @@ interface Task {
   title: string;
   description: string;
   priority: 'high' | 'medium' | 'low';
+  isCompleted: boolean;
 }
 
 interface VirtualTaskListProps {
   tasks: Task[];
   itemHeight?: number;
   visibleItems?: number;
+  onComplete?: (id: string) => void;
 }
 
 const VirtualTaskList: React.FC<VirtualTaskListProps> = ({
   tasks,
   itemHeight = 200,
-  visibleItems = 5
+  visibleItems = 5,
+  onComplete = () => {}
 }) => {
   const [scrollTop, setScrollTop] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -62,8 +65,10 @@ const VirtualTaskList: React.FC<VirtualTaskListProps> = ({
                 title={task.title}
                 description={task.description}
                 priority={task.priority}
+                isCompleted={task.isCompleted}
                 onDelete={() => {}}
                 onEdit={() => {}}
+                onComplete={onComplete}
               />
             </div>
           ))}

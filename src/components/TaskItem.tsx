@@ -5,9 +5,11 @@ interface TaskItemProps {
   id: string;
   title: string;
   description: string;
+  priority?: 'high' | 'medium' | 'low';
   onDelete: (id: string) => void;
   onEdit: (id: string, newTitle: string, newDescription: string) => void;
-  priority?: 'high' | 'medium' | 'low';
+  onComplete: (id: string) => void;
+  isCompleted?: boolean;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -16,24 +18,14 @@ const TaskItem: React.FC<TaskItemProps> = ({
   description,
   onDelete,
   onEdit,
+  onComplete,
+  isCompleted = false,
   priority = 'medium'
 }) => {
-  const [isCompleted, setIsCompleted] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
   const [editedDescription, setEditedDescription] = useState(description);
   const [showDetails, setShowDetails] = useState(false);
-
-  const handleComplete = () => {
-    setIsCompleted(!isCompleted);
-  };
-
-  const handleEdit = () => {
-    if (isEditing) {
-      onEdit(id, editedTitle, editedDescription);
-    }
-    setIsEditing(!isEditing);
-  };
 
   if (isCompleted && priority === 'low') {
     return null;
@@ -50,6 +42,13 @@ const TaskItem: React.FC<TaskItemProps> = ({
       default:
         return 'gray';
     }
+  };
+
+  const handleEdit = () => {
+    if (isEditing) {
+      onEdit(id, editedTitle, editedDescription);
+    }
+    setIsEditing(!isEditing);
   };
 
   return (
@@ -102,7 +101,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
         taskId={id}
         onEdit={handleEdit}
         onDelete={onDelete}
-        onComplete={handleComplete}
+        onComplete={() => onComplete(id)}
         isCompleted={isCompleted}
       />
     </div>

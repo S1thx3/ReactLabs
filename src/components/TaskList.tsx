@@ -1,67 +1,68 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import TaskItem from './TaskItem';
 import VirtualTaskList from './VirtualTaskList';
 import LazyTaskStatistics from './LazyTaskStatistics';
-
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  priority: 'high' | 'medium' | 'low';
-  isCompleted: boolean;
-}
+import { useTasks, Task } from '../hooks/useTasks';
 
 const TaskList: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: '1',
-      title: 'Learn React',
-      description: 'Study React fundamentals and hooks',
-      priority: 'high',
+  const { tasks, addTask, deleteTask, editTask, toggleComplete } = useTasks();
+  const [viewMode, setViewMode] = React.useState<'normal' | 'virtual'>('normal');
+
+  // useRef для автофокусу на полі вводу
+  const titleRef = useRef<HTMLInputElement>(null);
+
+  // Стейт для форми додавання задачі
+  const [newTitle, setNewTitle] = React.useState('');
+  const [newDescription, setNewDescription] = React.useState('');
+  const [newPriority, setNewPriority] = React.useState<'high' | 'medium' | 'low'>('medium');
+
+  const handleAddTask = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTitle.trim()) return;
+    addTask({
+      title: newTitle,
+      description: newDescription,
+      priority: newPriority,
       isCompleted: false
-    },
-    {
-      id: '2',
-      title: 'Build Project',
-      description: 'Create a new React application',
-      priority: 'medium',
-      isCompleted: false
-    },
-    {
-      id: '3',
-      title: 'Deploy App',
-      description: 'Deploy the application to production',
-      priority: 'low',
-      isCompleted: false
-    }
-  ]);
-
-  const [viewMode, setViewMode] = useState<'normal' | 'virtual'>('normal');
-
-  const handleDelete = (id: string) => {
-    setTasks(tasks.filter(task => task.id !== id));
-  };
-
-  const handleEdit = (id: string, newTitle: string, newDescription: string) => {
-    setTasks(tasks.map(task =>
-      task.id === id
-        ? { ...task, title: newTitle, description: newDescription }
-        : task
-    ));
-  };
-
-  const handleComplete = (id: string) => {
-    setTasks(tasks.map(task =>
-      task.id === id
-        ? { ...task, isCompleted: !task.isCompleted }
-        : task
-    ));
+    });
+    setNewTitle('');
+    setNewDescription('');
+    setNewPriority('medium');
+    // Автофокус після додавання
+    titleRef.current?.focus();
   };
 
   return (
     <div className="task-list">
       <h2>Task List</h2>
-      
+
+      {/* Форма додавання задачі */}
+      <form className="add-task-form" onSubmit={handleAddTask} style={{marginBottom: 24}}>
+        <input
+          ref={titleRef}
+          type="text"
+          placeholder="Task title"
+          value={newTitle}
+          onChange={e => setNewTitle(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Description"
+          value={newDescription}
+          onChange={e => setNewDescription(e.target.value)}
+        />
+        <select
+          value={newPriority}
+          onChange={e => setNewPriority(e.target.value as 'high' | 'medium' | 'low')}
+        >
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <button type="submit">Add Task</button>
+      </form>
+
       <div className="view-controls">
         <button 
           onClick={() => setViewMode('normal')}
@@ -86,8 +87,10 @@ const TaskList: React.FC = () => {
               title={task.title}
               description={task.description}
               priority={task.priority}
-              onDelete={handleDelete}
-              onEdit={handleEdit}
+              isCompleted={task.isCompleted}
+              onDelete={deleteTask}
+              onEdit={editTask}
+              onComplete={toggleComplete}
             />
           ))}
         </div>
@@ -96,6 +99,7 @@ const TaskList: React.FC = () => {
           tasks={tasks}
           itemHeight={200}
           visibleItems={5}
+          onComplete={toggleComplete}
         />
       )}
 
