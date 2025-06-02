@@ -3,10 +3,13 @@ import TaskItem from './TaskItem';
 import VirtualTaskList from './VirtualTaskList';
 import LazyTaskStatistics from './LazyTaskStatistics';
 import { useTasks, Task } from '../hooks/useTasks';
+import AddTaskForm from './AddTaskForm';
+import { useNavigate } from 'react-router-dom';
 
 const TaskList: React.FC = () => {
   const { tasks, addTask, deleteTask, editTask, toggleComplete } = useTasks();
   const [viewMode, setViewMode] = React.useState<'normal' | 'virtual'>('normal');
+  const navigate = useNavigate();
 
   // useRef для автофокусу на полі вводу
   const titleRef = useRef<HTMLInputElement>(null);
@@ -32,9 +35,21 @@ const TaskList: React.FC = () => {
     titleRef.current?.focus();
   };
 
+  // Додаємо обробку для розширеної форми
+  const handleAddTaskAdvanced = (data: any) => {
+    addTask({
+      title: data.title,
+      description: data.description + (data.important ? ' (Important)' : ''),
+      priority: data.priority,
+      isCompleted: false
+    });
+  };
+
   return (
     <div className="task-list">
       <h2>Task List</h2>
+
+      <button className="go-add-btn" onClick={() => navigate('/add-task')} style={{marginBottom: 20}}>+ Add New Task (Advanced)</button>
 
       {/* Форма додавання задачі */}
       <form className="add-task-form" onSubmit={handleAddTask} style={{marginBottom: 24}}>
