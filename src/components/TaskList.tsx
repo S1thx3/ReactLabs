@@ -49,7 +49,7 @@ const TaskList: React.FC = () => {
     <div className="task-list">
       <h2>Task List</h2>
 
-      <button className="go-add-btn" onClick={() => navigate('/add-task')} style={{marginBottom: 20}}>+ Add New Task (Advanced)</button>
+      <button className="go-add-btn" onClick={() => navigate('/add')} style={{marginBottom: 20}}>+ Add New Task (Advanced)</button>
 
       {/* Форма додавання задачі */}
       <form className="add-task-form" onSubmit={handleAddTask} style={{marginBottom: 24}}>
