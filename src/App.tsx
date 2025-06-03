@@ -7,17 +7,17 @@ import './App.css';
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <header className="App-header">
-          <h1>Task Management App</h1>
-        </header>
+    <div className="App">
+      <header className="App-header">
+          <h1>Task Management </h1>
+      </header>
         <main>
           <Routes>
             <Route path="/" element={<TaskList />} />
             <Route path="/add-task" element={<AddTaskPage />} />
           </Routes>
         </main>
-      </div>
+    </div>
     </BrowserRouter>
   );
 }

@@ -11,10 +11,8 @@ const TaskList: React.FC = () => {
   const [viewMode, setViewMode] = React.useState<'normal' | 'virtual'>('normal');
   const navigate = useNavigate();
 
-  // useRef для автофокусу на полі вводу
   const titleRef = useRef<HTMLInputElement>(null);
 
-  // Стейт для форми додавання задачі
   const [newTitle, setNewTitle] = React.useState('');
   const [newDescription, setNewDescription] = React.useState('');
   const [newPriority, setNewPriority] = React.useState<'high' | 'medium' | 'low'>('medium');
@@ -31,7 +29,6 @@ const TaskList: React.FC = () => {
     setNewTitle('');
     setNewDescription('');
     setNewPriority('medium');
-    // Автофокус після додавання
     titleRef.current?.focus();
   };
 
