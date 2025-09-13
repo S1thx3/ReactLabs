@@ -1,8 +1,38 @@
+:root[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafd;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --border-color: #cfd8dc;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --accent-color: #61dafb;
+  --accent-hover: #4fa8d1;
+  --header-bg: #282c34;
+  --header-text: #ffffff;
+}
+
+:root[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --border-color: #404040;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --accent-color: #61dafb;
+  --accent-hover: #4fa8d1;
+  --header-bg: #000000;
+  --header-text: #ffffff;
+}
+
 .App {
   text-align: center;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .App-logo {
@@ -17,9 +47,10 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--header-bg);
   padding: 20px;
-  color: white;
+  color: var(--header-text);
+  margin-bottom: 30px;
 }
 
 .App-link {
@@ -38,12 +69,91 @@
   padding: 20px;
 }
 
+.view-controls {
+  margin-bottom: 20px;
+}
+
+.view-controls button {
+  padding: 8px 16px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.view-controls button.active {
+  background-color: #61dafb;
+  color: white;
+}
+
 .tasks-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px;
 }
+
+.task-item {
+  background: var(--bg-primary);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  position: relative;
+  border: 1px solid var(--border-color);
+}
+
+.task-item.completed {
+  opacity: 0.7;
+  background: var(--bg-secondary);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.priority-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.task-content h3 {
+  margin: 0 0 10px 0;
+  color: var(--text-primary);
+}
+
+.task-content p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.task-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.action-button:hover {
+  background-color: #f0f0f0;
+}
+
 .edit-form {
   display: flex;
   flex-direction: column;
@@ -56,5 +166,296 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1em;
+}
+
+.edit-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Virtual List Styles */
+.virtual-list-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.virtual-list-inner {
+  position: relative;
+}
+
+.virtual-list-items {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.virtual-list-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Statistics Styles */
+.task-statistics {
+  margin-top: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.stat-item {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.stat-item h4 {
+  margin: 0 0 10px 0;
+  color: #666;
+}
+
+.stat-item p {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+/* Lazy Loading Styles */
+.lazy-statistics {
+  margin-top: 20px;
+}
+
+.toggle-statistics {
+  padding: 8px 16px;
+  background-color: #61dafb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggle-statistics:hover {
+  background-color: #4fa8d1;
+}
+
+.add-task-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.add-task-form input,
+.add-task-form select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.add-task-form button {
+  padding: 8px 16px;
+  background-color: #61dafb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-task-form button:hover {
+  background-color: #4fa8d1;
+}
+
+.form-error {
+  color: #d32f2f;
+  font-size: 0.95em;
+  margin-bottom: 4px;
+  display: block;
+}
+.add-task-form input[type="date"] {
+  min-width: 140px;
+}
+.add-task-form input[type="email"] {
+  min-width: 180px;
+}
+.add-task-form label {
+  font-size: 1em;
+}
+
+.add-task-page {
+  max-width: 500px;
+  margin: 40px auto;
+  background: var(--bg-primary);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px var(--shadow-color);
+  padding: 40px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 60vh;
+  position: relative;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.add-task-page h2 {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 32px;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.add-task-page .add-task-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.add-task-page .add-task-form input,
+.add-task-page .add-task-form select,
+.add-task-page .add-task-form textarea {
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1.1em;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.add-task-page .add-task-form input:focus,
+.add-task-page .add-task-form select:focus,
+.add-task-page .add-task-form textarea:focus {
+  border: 1.5px solid var(--accent-color);
+  outline: none;
+  background: var(--bg-primary);
+}
+
+.add-task-page .add-task-form button[type="submit"] {
+  padding: 12px 0;
+  background: linear-gradient(90deg, var(--accent-color) 60%, var(--accent-hover) 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.add-task-page .add-task-form button[type="submit"]:hover {
+  background: linear-gradient(90deg, var(--accent-hover) 60%, var(--accent-color) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.add-task-page .form-error {
+  color: #d32f2f;
+  font-size: 0.98em;
+  margin-top: -10px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.add-task-page label {
+  font-size: 1.08em;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-btn {
+  margin-top: 32px;
+  padding: 12px 32px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.back-btn:hover {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+@media (max-width: 600px) {
+  .add-task-page {
+    max-width: 98vw;
+    padding: 18px 4vw 18px 4vw;
+  }
+  .add-task-page h2 {
+    font-size: 1.3em;
+  }
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 1.2em;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  background: var(--accent-color);
+  color: white;
+}
+
+.go-add-btn {
+  padding: 12px 24px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.go-add-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
